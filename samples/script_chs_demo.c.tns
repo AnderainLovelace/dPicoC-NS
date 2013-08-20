@@ -1,0 +1,39 @@
+#define FONT_16_SIZE 32
+
+FILE *			HZK = NULL;
+unsigned char	mat[FONT_16_SIZE];
+
+int open_hzk ()
+{
+	HZK = fopen("/documents/dpicoc/HZK16.tns","rb");
+	if (HZK==NULL) return 0;
+	return 1;
+}
+
+void put_chs(int x,int y,unsigned char * str)
+{
+	unsigned char c1,c2;
+	while(*str)
+	{
+		c1 = *str++;
+		if(!(c1 & 0x80)) continue;
+		c2 = *str++;
+		fseek(HZK,(94*(c1-0xa1)+(c2-0xa1))*FONT_16_SIZE,SEEK_SET);
+		fread(mat,FONT_16_SIZE,1,HZK);
+		write_graph(x,y,16,16,mat,0x0,0xF);
+		x+=16;
+	}
+}
+
+void close_hzk ()
+{
+	if (HZK!=NULL)
+		fclose(HZK);
+}
+
+open_hzk	();
+put_chs		(0,0,"汉字库使用演示——ｂｙ　安德兰");
+close_hzk	();
+
+sleep(500);
+getch();

@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <os.h>
+int main()
+{
+	int width,s,height,offset,x,y;
+	FILE * fp = fopen("/documents/dpicoc/C_C.bmp.tns","rb");
+	if (fp==NULL)
+	{
+		puts("cannot open file");
+		return -1;
+	}
+	fseek(fp,0x1C,SEEK_SET);
+	fread(&s,sizeof(short),1,fp);
+	if (s != 24)
+	{
+		puts("not a 24-bit bitmap");
+		fclose(fp);
+		return -1;
+	}
+	fseek(fp,0x12,SEEK_SET);
+	fread(&width ,sizeof(int),1,fp);
+	fread(&height,sizeof(int),1,fp);
+	fseek(fp,0xA,SEEK_SET);
+	fread(&offset,sizeof(int),1,fp);
+	fseek(fp,offset,SEEK_SET);
+	
+	unsigned char r,g,b,c;
+	int i;
+	printf("width = %d,height = %d\noffset = %d\n",width,height,offset);
+	puts("press any key to continue");
+	sleep(500);
+	getch();
+	clrscr();
+	for (y = 0;y < height;++y)
+	{
+		for (x = 0;x < width;++x)
+		{
+			fread(&b,1,1,fp);fread(&g,1,1,fp);fread(&r,1,1,fp);c = (r+g+b)/3>>4;
+			setpixel(x,height-y,c);
+		}
+	}
+	fclose(fp);
+	getch();
+	return 0;
+}

@@ -1,0 +1,11 @@
+double fabs(double x);
+double cos(double x);
+double sin(double x);
+double tan(double x);
+double coef(int n);
+double horner(double x);
+double sqrt(double b);
+double ln(double x);
+double log(double m,double base);
+double exp(double x);
+double pow(double m,double n);

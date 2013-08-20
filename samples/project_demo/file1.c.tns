@@ -1,0 +1,13 @@
+#include <stdio.h>
+extern int abs(int);
+extern long atol(char *);
+
+int main ()
+{
+	int a;
+	char buf[64];
+	puts("input a num");
+	a = atol(gets(buf));
+	printf("abs(%d)=%d\n",a,abs(a));
+	return 0;
+}
